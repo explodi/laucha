@@ -1,0 +1,459 @@
+
+<html>
+<head>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script>
+    var LAUCHA_CONTRACT="0x6c0b890b17d8fbc45933f13b77c5c4b76513fdfd"
+    var token
+    var price
+    var erc20Abi = [
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "totalSupply",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "symbol",
+      "outputs": [
+        {
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "address"
+        },
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "allowance",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "price",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "name",
+      "outputs": [
+        {
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "decimals",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint8"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "balanceOf",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_from",
+          "type": "address"
+        },
+        {
+          "name": "_value",
+          "type": "uint256"
+        }
+      ],
+      "name": "burnFrom",
+      "outputs": [
+        {
+          "name": "success",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "from",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "value",
+          "type": "uint256"
+        }
+      ],
+      "name": "Burn",
+      "type": "event"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_from",
+          "type": "address"
+        },
+        {
+          "name": "_to",
+          "type": "address"
+        },
+        {
+          "name": "_value",
+          "type": "uint256"
+        }
+      ],
+      "name": "transferFrom",
+      "outputs": [
+        {
+          "name": "success",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "from",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "name": "to",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "value",
+          "type": "uint256"
+        }
+      ],
+      "name": "Transfer",
+      "type": "event"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "sell",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_spender",
+          "type": "address"
+        },
+        {
+          "name": "_value",
+          "type": "uint256"
+        }
+      ],
+      "name": "approve",
+      "outputs": [
+        {
+          "name": "success",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_spender",
+          "type": "address"
+        },
+        {
+          "name": "_value",
+          "type": "uint256"
+        },
+        {
+          "name": "_extraData",
+          "type": "bytes"
+        }
+      ],
+      "name": "approveAndCall",
+      "outputs": [
+        {
+          "name": "success",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "name": "initialSupply",
+          "type": "uint256"
+        },
+        {
+          "name": "tokenName",
+          "type": "string"
+        },
+        {
+          "name": "tokenSymbol",
+          "type": "string"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "buy",
+      "outputs": [],
+      "payable": true,
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_value",
+          "type": "uint256"
+        }
+      ],
+      "name": "burn",
+      "outputs": [
+        {
+          "name": "success",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_to",
+          "type": "address"
+        },
+        {
+          "name": "_value",
+          "type": "uint256"
+        }
+      ],
+      "name": "transfer",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ]
+    window.addEventListener('load', function() {
+      
+      // Checking if Web3 has been injected by the browser (Mist/MetaMask)
+      if (typeof web3 !== 'undefined') {
+        // Use Mist/MetaMask's provider
+        window.web3 = new Web3(web3.currentProvider);
+      } else {
+        console.log('No web3? You should consider trying MetaMask!')
+        // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
+        window.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+      }
+      
+      // Now you can start your app & access web3 freely:
+      setTimeout(function() {startApp()}, 1000)
+      
+    })
+    function send() {
+      token.transfer($("#send-address").val(), 1000000000000000000, {
+        from: web3.eth.accounts[0],
+        gas: 461238
+      }, function(err, result) {
+        if (err) console.log(err)
+        else console.log(result);
+      });
+    }
+    function buy() {
+      token.buy({
+        value: price,
+        gas: 461238
+      }, function(err, result) {
+        if (err) console.log(err)
+        else console.log(result);
+      });
+    }
+    function sell() {
+      token.sell({
+        gas: 461238
+      }, function(err, result) {
+        if (err) console.log(err)
+        else console.log(result);
+      });
+    }
+    
+    function startApp() {
+      $("#address").html(web3.eth.accounts[0])
+
+      token = web3.eth.contract(erc20Abi).at(LAUCHA_CONTRACT)
+      // 1. get the total supply
+      
+      token.totalSupply.call(function (err, totalSupply) {
+        
+        // 2. get the number of decimal places used to represent this token
+        
+        token.decimals.call(function (err, decimals) {
+          var divisor = new web3.BigNumber(10).toPower(decimals);
+
+          // 3. get the name of the token
+          
+          token.name.call(function (err, name) {
+            
+            // 3. get the balance of the account holder
+            
+            
+            token.balanceOf.call(web3.eth.accounts[0], function (err, balance) {
+              
+              totalSupply = totalSupply.div(divisor);
+              balance = balance.div(divisor);
+              console.log(balance)
+              $("#balance").html(parseInt(balance.round(5))+" 🐀 ")
+
+              token.price.call(function(err,p){
+                console.log(p*divisor)
+                price=p;
+
+                $("#price").html(price+" wei")
+              })
+
+            });
+            
+          });
+          
+        });
+        
+      });
+    }
+  </script>
+</head>
+<body>
+  <h1>Laucha</h1>
+  <h2>Wallet</h2>
+  <table>
+      <tr>
+        <td>Dirección</td>
+        <td id="address">cargando...</td>
+      </tr>
+    <tr>
+      <td>Balance</td>
+      <td id="balance">cargando...</td>
+    </tr>
+  </table>
+  <h2>Enviar</h2>
+  <table>
+      <tr>
+        <td>Dirección</td>
+        <td><input id="send-address"></input></td>
+      </tr>
+    <tr>
+      <td>Cantidad</td>
+      <td><input id="send-amount" value="1"></input></td>
+    </tr>
+  </table>
+  <button onclick="javascript:send()">send</button>
+  <h2>Comprar Laucha</h2>
+  <table>
+  <tr>
+    <td>Precio</td>
+    <td id="price">cargando...</td>
+  </tr>
+</table>
+  <button onclick="javascript:buy()">Comprar 1 LAUCHA</button>
+
+  <button onclick="javascript:sell()">Vender 1 LAUCHA</button>
+</body>
+</html>
