@@ -175,7 +175,9 @@ contract Laucha is TokenERC20 {
     }
     function sell() public {
         require(this.balance >= price);      // checks if the contract has enough ether to buy
+        require(price>=1);
         _transfer(msg.sender, this, 1 * 10 ** uint256(18));              // makes the transfers
         msg.sender.transfer(price);          // sends ether to the seller. It's important to do this last to avoid recursion attacks
+        price-=1;
     }
 }
