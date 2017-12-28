@@ -32,7 +32,9 @@
         gas: 461238
       }, function(err, result) {
         if (err) console.log(err)
-        else console.log(result);
+        else {
+          alert("Has enviado una laucha a tu amige");
+        }
       });
     }
     function buy() {
@@ -124,7 +126,7 @@
       </tr>
     <tr>
       <td>Cantidad</td>
-      <td><input id="send-amount" value="1"></input></td>
+      <td><input id="send-amount" value="1" disabled></input></td>
     </tr>
   </table>
   <button onclick="javascript:send()">send</button>
