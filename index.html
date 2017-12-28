@@ -41,7 +41,9 @@
         gas: 461238
       }, function(err, result) {
         if (err) console.log(err)
-        else console.log(result);
+        else {
+          alert("has comprado 1 laucha. debería tardar al menos un minuto en llegar")
+        }
       });
     }
     function sell() {
@@ -57,9 +59,12 @@
       $("#address").html(web3.eth.accounts[0])
 
       token = web3.eth.contract(ABI).at(LAUCHA_CONTRACT)
-      // 1. get the total supply
+      refreshData();
+    }
+    function refreshData() {
+       // 1. get the total supply
       
-      token.totalSupply.call(function (err, totalSupply) {
+       token.totalSupply.call(function (err, totalSupply) {
         
         // 2. get the number of decimal places used to represent this token
         
@@ -95,6 +100,7 @@
         
       });
     }
+    setInterval("refreshData",3000);
   </script>
 </head>
 <body>
